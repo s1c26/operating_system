@@ -1,11 +1,18 @@
-#include "IDT.h"
+#include "idt.h"
 
-void set_idt_entry(int index, uint32_t base, uint16_t selector, uint8_t type_attr) {
-    idt[index].base_low = base & 0xFFFF;
-    idt[index].base_high = (base >> 16) & 0xFFFF;
-    idt[index].selector = selector;
-    idt[index].zero = 0;
-    idt[index].type_attr = type_attr;
+void set_idt_entry(idt_entry_t *entry,
+                   uint64_t base,
+                   uint16_t segment,
+                   uint8_t ist,
+                   uint8_t type_attr)
+{
+    entry->base_low = base & 0xffff;
+    entry->base_mid = (base >> 16) & 0xffff;
+    entry->segment = segment;
+    entry->zero = 0;
+    entry->ist = ist;
+    entry->type_attr = type_attr;
+    entry->base_high = (base >> 32) & 0xffffffff
 }
 
 void init_idt() {
