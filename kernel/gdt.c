@@ -52,5 +52,5 @@ void gdt_init() {
     gdt_set_entry(&gdt[2], 0, 0xFFFFFFFF, data_flags, data_gran);
 
     // Load the GDT
-    gdt_load(&gdt_pointer, 1, 2);
+    gdt_load(&gdt_pointer, 0x08, 0x10);
 }

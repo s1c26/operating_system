@@ -1,7 +1,7 @@
 #ifndef _GDT_H
 #define _GDT_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 // GDT Access Byte flags
 #define GDT_AC_PRES ((uint8_t)0x80)

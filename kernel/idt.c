@@ -12,16 +12,19 @@ void set_idt_entry(idt_entry_t *entry,
     entry->zero = 0;
     entry->ist = ist;
     entry->type_attr = type_attr;
-    entry->base_high = (base >> 32) & 0xffffffff
+    entry->base_high = (base >> 32) & 0xffffffff;
 }
 
+idt_entry_t idt[256];
+idt_pointer_t idt_pointer;
+
 void init_idt() {
-    idt_pointer.limit = (sizeof(struct IDTEntry) * IDT_ENTRIES) - 1;
+    idt_pointer.limit = (sizeof(struct IDTEntry) * 256) - 1;
     idt_pointer.base = (uint32_t)&idt;
 
     // Set all IDT entries to 0 (unused interrupts)
-    for (int i = 0; i < IDT_ENTRIES; i++) {
-        set_idt_entry(i, 0, 0x08, 0x8E); // Null handler, ring 0, 32-bit interrupt gate
+    for (int i = 0; i < 256; i++) {
+        set_idt_entry(&idt[i], 0, 0x08, 0x8E); // Null handler, ring 0, 32-bit interrupt gate
     }
 
     // Example: Set an interrupt handler for interrupt 0x21 (keyboard, for instance)
