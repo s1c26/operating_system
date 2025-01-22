@@ -1,20 +1,25 @@
 section .text
 global gdt_load
 gdt_load:
-    lgdt    [rcx]
+    push    ebp
+    mov     ebp, esp
+
+    mov     eax, [ebp + 8]
+    lgdt    [eax]
 
     ; Do some hacky stuff to effectuate new GDT
-    mov     rax, rdx
-    push    rax
-    lea     rax, [rel .reload_cs]
-    push    rax
-    retfq
+    mov     eax, [ebp + 12]
+    push    eax
+    push    .reload_cs
+    retf
 
 .reload_cs:
-    mov     rax, r8
+    mov     eax, [ebp + 16]
     mov     ds, ax
     mov     es, ax
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
+
+    pop     ebp
     ret

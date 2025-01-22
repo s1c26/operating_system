@@ -1,28 +1,51 @@
-ENTRY(kernel_entry)
+ENTRY(entry)
+
 SECTIONS
 {
-    . = 0xffff880000000000;
+    . = 2M;
 
-    .text : AT(ADDR(.text) - 0xffff880000000000)
+    kernel_start = . + 0xc0000000;
+    header_start = . + 0xc0000000;
+    
+    .header : {
+        *(.header);
+    }
+
+    . += 0xc0000000;
+
+    header_end = .;
+    text_start = .;
+
+    .text ALIGN(4K) : AT(ADDR(.text) - 0xc0000000)
     {
-        _code = .;
         *(.text)
+    }
+
+    text_end = .;
+    rodata_start = .;
+
+    .rodata ALIGN(4K) : AT(ADDR(.text) - 0xc0000000)
+    {
         *(.rodata*)
-        . = ALIGN(4096);
     }
 
-    .data : AT(ADDR(.data) - 0xffff880000000000)
+    rodata_end = .;
+    data_start = .;
+
+    .data ALIGN(4K) : AT(ADDR(.data) - 0xc0000000)
     {
-        _data = .;
         *(.data)
-        . = ALIGN(4096);
     }
 
-    .bss : AT(ADDR(.bss) - 0xffff880000000000)
+    data_end = .;
+    bss_start = .;
+
+    .bss ALIGN(4K) : AT(ADDR(.bss) - 0xc0000000)
     {
-        _bss = .;
         *(.bss)
         *(COMMON)
-        . = ALIGN(4096);
     }
+
+    bss_end = .;
+    kernel_end = .;
 }

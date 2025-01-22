@@ -38,7 +38,7 @@ typedef struct GDTEntry gdt_entry_t;
 // GDTR structure
 struct GDTPointer {
     uint16_t limit; // Size of the GDT
-    uint64_t base;  // Base address of the GDT
+    uint32_t base;  // Base address of the GDT
 } __attribute__((packed));
 
 typedef struct GDTPointer gdt_pointer_t;

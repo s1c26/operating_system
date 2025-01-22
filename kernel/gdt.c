@@ -22,7 +22,7 @@ void gdt_set_entry(gdt_entry_t *entry,
 
 void gdt_init() {
     gdt_pointer.limit = (sizeof(gdt_entry_t) * 3) - 1;
-    gdt_pointer.base = (uint64_t)&gdt;
+    gdt_pointer.base = (uint32_t)&gdt;
 
     // Null descriptor
     gdt_set_entry(&gdt[0], 0, 0, 0, 0);
@@ -35,7 +35,7 @@ void gdt_init() {
 
     // The 64 bit code flag is set because this is a 64-bit code segment. This
     // flag shouldn't be set for data segments
-    uint8_t code_gran = GDT_GR_PAGE | GDT_GR_64;
+    uint8_t code_gran = GDT_GR_PAGE | GDT_GR_32;
 
     gdt_set_entry(&gdt[1], 0, 0xFFFFFFFF, code_flags, code_gran);
 

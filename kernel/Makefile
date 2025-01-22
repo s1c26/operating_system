@@ -2,32 +2,31 @@ CC=clang
 AS=nasm
 LD=ld.lld
 
-CFLAGS:=-nostdlib \
+CFLAGS:=-m32 \
+		-nostdlib \
         -fno-builtin \
 		-fno-stack-protector \
 		-nostartfiles \
 		-nodefaultlibs \
 		-ffreestanding \
-		-mno-red-zone \
-		-mno-mmx \
-		-mno-sse \
-		-mno-sse2 \
+		-I../include \
+		-Iinclude \
 		-masm=intel \
 		-Wall -Werror -Wextra -Wpedantic \
 		-O0
 
-ASFLAGS:=-felf64
+ASFLAGS:=-felf32
 
 LINKERSCRIPT:=linkerscript.ld
 LDFLAGS:=-T$(LINKERSCRIPT) \
-		 -melf_x86_64 \
+		 -melf_i386 \
 		 -nostdlib
 
 TARGET:=KERNEL.ELF
 
 _BUILD:=$(BUILD)/kernel
 
-OBJECTS:=entry.c
+OBJECTS:=entry.asm kernel_main.c gdt_load.asm gdt.c
 _OBJECTS:=$(patsubst %.c, $(_BUILD)/%.o, $(OBJECTS))
 _OBJECTS:=$(patsubst %.asm, $(_BUILD)/%.o, $(_OBJECTS))
 _TARGET:=$(BUILD)/$(TARGET)
